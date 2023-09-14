@@ -1,64 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Contact Form</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function() {
-            // https://dashboard.emailjs.com/admin/account
-            emailjs.init('vLMvIcZfAlIaPTY3Y');
-        })();
-    </script>
-    <script type="text/javascript">
-        const btn = document.getElementById('button');
-
-document.getElementById('form')
- .addEventListener('submit', function(event) {
-   event.preventDefault();
-
-   btn.value = 'Sending...';
-
-   const serviceID = 'default_service';
-   const templateID = 'template_zxax6zb';
-
-   emailjs.sendForm(serviceID, templateID, this)
-    .then(() => {
-      btn.value = 'Send Email';
-      alert('Sent!');
-    }, (err) => {
-      btn.value = 'Send Email';
-      alert(JSON.stringify(err));
-    });
-});
-    </script>
+  <title>Contact Form</title>
+  <!-- Include EmailJS script -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function () {
+      // Initialize EmailJS with your public key
+      emailjs.init('YOUR_PUBLIC_KEY');
+    })();
+  </script>
 </head>
 <body>
-    <form id="form">
-        <div class="field">
-          <label for="your_email">your_email</label>
-          <input type="text" name="your_email" id="your_email">
+  <div class="col-lg-8 mt-5 mt-lg-0">
+    <form id="contact-form">
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
         </div>
-        <div class="field">
-          <label for="subject">subject</label>
-          <input type="text" name="subject" id="subject">
+        <div class="col-md-6 form-group mt-3 mt-md-0">
+          <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
         </div>
-        <div class="field">
-          <label for="message">message</label>
-          <input type="text" name="message" id="message">
-        </div>
-        <div class="field">
-          <label for="from_name">from_name</label>
-          <input type="text" name="from_name" id="from_name">
-        </div>
-      
-        <input type="submit" id="button" value="Send Email" >
-      </form>
-      
-      <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-      
-      <script type="text/javascript">
-        emailjs.init('vLMvIcZfAlIaPTY3Y')
-      </script>
+      </div>
+      <div class="form-group mt-3">
+        <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+      </div>
+      <div class="form-group mt-3">
+        <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+      </div>
+      <div class="my-3">
+        <div class="loading" style="display: none;">Loading</div>
+        <div class="error-message" style="display: none;"></div>
+        <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
+      </div>
+      <div class="text-center"><button type="submit">Send Message</button></div>
+    </form>
+  </div>
+
+  <!-- Include your JavaScript code for EmailJS integration -->
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      const contactForm = document.querySelector("#contact-form");
+      const submitBtn = document.querySelector("#contact-form button[type='submit']");
+      const nameInput = document.querySelector("#name");
+      const emailInput = document.querySelector("#email");
+      const subjectInput = document.querySelector("#subject");
+      const messageInput = document.querySelector("#message");
+      const loadingMessage = document.querySelector(".loading");
+      const errorMessage = document.querySelector(".error-message");
+      const sentMessage = document.querySelector(".sent-message");
+
+      const serviceID = "YOUR_SERVICE_ID"; // Replace with your EmailJS service ID
+      const templateID = "YOUR_TEMPLATE_ID"; // Replace with your EmailJS template ID
+
+      contactForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        submitBtn.innerText = "Just A Moment...";
+
+        const inputFields = {
+          name: nameInput.value,
+          email: emailInput.value,
+          subject: subjectInput.value,
+          message: messageInput.value
+        };
+
+        errorMessage.style.display = 'none';
+        loadingMessage.style.display = 'none';
+        sentMessage.style.display = 'none';
+
+        emailjs.send(serviceID, templateID, inputFields)
+          .then(() => {
+            submitBtn.innerText = "Message Sent Successfully";
+            nameInput.value = '';
+            emailInput.value = '';
+            subjectInput.value = '';
+            messageInput.value = '';
+            sentMessage.style.display = 'block';
+          })
+          .catch((error) => {
+            console.error('Email sending failed:', error);
+            submitBtn.innerText = "Send Message";
+            errorMessage.style.display = 'block';
+          });
+      });
+    });
+  </script>
 </body>
 </html>
