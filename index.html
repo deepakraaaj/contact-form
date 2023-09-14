@@ -58,16 +58,16 @@
 
         submitBtn.innerText = "Just A Moment...";
 
+        errorMessage.style.display = 'none';
+        loadingMessage.style.display = 'none';
+        sentMessage.style.display = 'none';
+
         const inputFields = {
           name: nameInput.value,
           email: emailInput.value,
           subject: subjectInput.value,
-          message: messageInput.value,
+          message: messageInput.value
         };
-
-        errorMessage.style.display = 'none';
-        loadingMessage.style.display = 'none';
-        sentMessage.style.display = 'none';
 
         emailjs.send(serviceID, templateID, inputFields)
           .then(() => {
@@ -86,9 +86,5 @@
       });
     });
   </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-  
 </body>
 </html>
